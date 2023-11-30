@@ -1,0 +1,106 @@
+/* ChatUI.css */
+
+/* Overall chat container */
+
+.hero {
+    width: 100%;
+    max-height: 100vh;
+    background: url("../../assets/img/portfolio-header.jpg") top center;
+    background-size: cover;
+    position: relative;
+    padding: 93px 0;
+    z-index: 3;
+    display:flex;
+    justify-content: center;
+  }
+  .chat-ui {
+    display: flex;
+    flex-direction: column;
+    height: 87vh;
+    
+    overflow: hidden;
+    width: 100%;
+    background-color: #11111194;
+    box-sizing: border-box;
+    z-index: 4;
+    }
+
+    .hero .Assistantheader{
+        margin: 0;
+        font-size: 30px;
+        font-weight: 600;
+        line-height: 1.2;
+        color: #fff;
+        font-family: var(--font-secondary);
+        padding: 10px;
+    }
+    
+    /* Chat container to display messages */
+    .chat-container {
+      flex: 1 1;
+      overflow-y: scroll;
+      display: flex;
+      padding: 10px;
+      flex-direction: column;
+    }
+    
+    /* Individual chat message style */
+    .message {
+      max-width: 80%;
+      padding: 8px;
+      margin: 8px;
+      border-radius: 10px;
+    }
+    .user {
+      background-color: #007BFF;
+      color: #fff;
+      align-self: flex-end;
+    }
+    
+    /* ChatGPT message style */
+    .chatgpt {
+      background-color: #28A745;
+      color: #fff;
+      align-self: flex-start;
+    }
+    
+    /* User message style */
+    .user {
+      background-color: #007BFF;
+      color: #fff;
+      align-self: flex-end;
+    }
+    
+    /* ChatGPT message style */
+    .chatgpt {
+      background-color: #28A745;
+      color: #fff;
+      align-self: flex-start;
+    }
+    
+    /* Input container for typing messages */
+    .input-container {
+      display: flex;
+      background-color: #fff;
+      border-top: 1px solid #ccc;
+      padding: 10px;
+    }
+    
+    /* Input field style */
+    .input-container input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    
+    /* Send button style */
+    .input-container button {
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+    

@@ -1,0 +1,79 @@
+import React, { useState, useEffect } from 'react';
+import { DataGrid } from '@mui/x-data-grid';
+import "./ExpenceCategory.css"
+import AddExpenseCategory from '../../Component/AddExpenseCategory/AddExpenseCategory';
+
+const ExpenceCategoryTable = () => {
+  const [ExpenceCategorys, setExpenceCategorys] = useState([]);
+
+  useEffect(() => {
+    // Fetch documents or set them from your state management library
+    const fetchedExpenceCategorys = [
+      { id: 1, category_id: 1, category_name: 'Housing' },
+      { id: 2, category_id: 2, category_name: 'Transportation' },
+      { id: 3, category_id: 3, category_name: 'Food and Groceries' },
+      { id: 4, category_id: 4, category_name: 'Healthcare' },
+      { id: 5, category_id: 5, category_name: 'Utilities' },
+      { id: 6, category_id: 6, category_name: 'Entertainment' },
+    ];
+
+    setExpenceCategorys(fetchedExpenceCategorys);
+  }, []);
+
+  const columns = [
+    { field: 'category_id', headerName: 'ID', width: 70 },
+    { field: 'category_name', headerName: 'Category Name', width: 200 }
+  ];
+  const [isUploadpopupOpen, setUploadpopupOpen] = useState(false);
+
+  const openUploadpopup = () => {
+    setUploadpopupOpen(true);
+    console.log(isUploadpopupOpen)
+  };
+  const closeUploadpopup = () => {
+    setUploadpopupOpen(false);
+  };
+
+  return (
+    <div>
+    
+    <div class="breadcrumbs d-flex align-items-center ExpenceCategorysBGImg" >
+            <div class="container position-relative d-flex flex-column align-items-center">
+
+                <h2>Expence Category</h2>
+                <ol>
+                <li><a href="index.html">Home</a></li>
+                <li>Expence Category</li>
+                </ol>
+
+            </div>
+    </div> 
+    <AddExpenseCategory isopen={isUploadpopupOpen} onclose={closeUploadpopup}/>
+    <section id="blog" class="blog">
+      <div class="container "  data-aos="fade-up">
+        <div className='ExpenceCategorysMangerHeader'>
+            <h2 className='ExpenceCategorysManagerHeaderText'>ExpenceCategorys</h2>
+            <button className="AddExpenceCategorysButton" onClick={openUploadpopup}>Add ExpenceCategory</button>
+        </div>
+        <div className='ExpenceCategorys-grid'>
+        <DataGrid
+               
+                rows={ExpenceCategorys}
+                columns={columns}
+                pageSize={5}
+                rowsPerPageOptions={[5, 10, 20]}
+                checkboxSelection
+                disableSelectionOnClick
+            />
+        </div>
+   
+
+      </div>
+    </section>
+    
+    </div>
+   
+  );
+};
+
+export default ExpenceCategoryTable;
