@@ -19,15 +19,17 @@ import store from '../src/Redux/Store/store'
 import AuthRoute from './Component/AuthRoute/AuthRoute';
 import home from './Pages/Home/Home';
 import Chat from './Pages/Chat/Chat';
+import { Alert } from 'react-bootstrap';
+import {hideAlert} from './Redux/Reducers/alertslice'
 function App() {
   const [isLoginPopupOpen, setLoginPopupOpen] = useState(false);
   const UserDetail = useSelector((state) => state.auth);
+  const AlterService = useSelector((state) => state.alert);
   const openLoginPopup = () => {
     setLoginPopupOpen(true);
-    console.log(isLoginPopupOpen)
   };
 
-
+  
   useEffect(() => {
     // Function to handle the scroll event
     const selectHeader = document.querySelector('#header');
@@ -56,13 +58,16 @@ function App() {
   const closeLoginPopup = () => {
     setLoginPopupOpen(false);
   };
-  console.log(home)
+  console.log(AlterService.showAlert ? "show":"");
   return (
     <Provider store={store}>
           <Router>
                 <div className="app-container">
                   <Header onOpen={openLoginPopup}/>
                   <LoginModal onClose={() => closeLoginPopup()} isopen={isLoginPopupOpen} />
+                  <Alert variant={AlterService.alertType} show={AlterService.showAlert} onClose={hideAlert} dismissible className={`animated-alert`}>
+                    {AlterService.message}
+                  </Alert>
                   <div className="page-content">
                     <Routes>
                       <Route path="/" exact element={<LandingPage/>} />

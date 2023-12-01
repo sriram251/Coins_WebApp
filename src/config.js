@@ -12,5 +12,7 @@ export const Endpoints = {
     "add_ExpenseCategory":"add_ExpenseCategory",
     "add_Budget":"add_Budget",
     "add_Expense":"add_Expense",
-    "QAdocument":"QAdocument"
+    "QAdocument":"QAdocument",
+    "UploadDocument":"UploadDocument",
+    "FinancialAssistant":"FinancialAssistant",
 }

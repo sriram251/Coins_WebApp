@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {useSelector,useDispatch} from 'react-redux'
 import { DataGrid } from '@mui/x-data-grid';
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -6,30 +7,36 @@ import ChatIcon from '@mui/icons-material/Chat';
 import "./DocumentGrid.css"
 import FileUpload from "../../Component/FileUpload/FileUpload"
 import '../../assets/css/main.css'
+import {GetDocuments} from '../../Services/Apiservice'
+import {logout} from '../../Redux/Reducers/authslice'
 const DocumentTable = () => {
   const [documents, setDocuments] = useState([]);
-
+  const UserDetail = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   useEffect(() => {
     // Fetch documents or set them from your state management library
-    const fetchedDocuments = [
-      {
-        id: 1,
-        title: 'Financials',
-        description: 'test',
-        document_id: 39,
-        file_path: 'uploads\\Sriram_Rajah_CV.pdf',
-        is_encoded: true,
-        upload_date: '2023-11-13T07:29:23.364583',
-        user_id: 2,
-      },
-      // Add more documents as needed
-    ];
+     
+    GetDocument()
 
-    setDocuments(fetchedDocuments);
+   
   }, []);
-
+  function GetDocument(){
+    GetDocuments(UserDetail.token).then((data)=>{
+        console.log(data.Response);
+        setDocuments(data.Response);
+     }).catch((err)=>{
+        if (err.response && err.response.status === 401) {
+            // Trigger the logout action when a 401 error occurs
+            dispatch(logout());
+            console.log("ok")
+            window.location.href = "/";
+          }
+        console.log(err)
+     })
+  }
+ 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'document_id', headerName: 'ID', width: 70 },
     { field: 'title', headerName: 'Title', width: 150 },
     { field: 'description', headerName: 'Description', width: 200 },
     { field: 'upload_date', headerName: 'Upload Date', width: 200 },
@@ -80,7 +87,9 @@ const DocumentTable = () => {
     console.log(isUploadpopupOpen)
   };
   const closeUploadpopup = () => {
+    
     setUploadpopupOpen(false);
+    GetDocuments()
   };
 
   return (
@@ -96,8 +105,13 @@ const DocumentTable = () => {
                 </ol>
 
             </div>
-    </div> 
-    <FileUpload isopen={isUploadpopupOpen} onclose={closeUploadpopup}/>
+    </div>
+    {
+        isUploadpopupOpen?
+        <FileUpload isopen={isUploadpopupOpen} onclose={closeUploadpopup}/>:<></>
+
+    } 
+    
     <section id="blog" className="blog">
       <div className="container "  data-aos="fade-up">
         <div className='DocumentMangerHeader'>
@@ -110,6 +124,7 @@ const DocumentTable = () => {
                 rows={documents}
                 columns={columns}
                 pageSize={5}
+                getRowId={(row) => row.document_id}
                 rowsPerPageOptions={[5, 10, 20]}
                 checkboxSelection
                 disableSelectionOnClick

@@ -1,12 +1,15 @@
 import React,{useState,useEffect,useRef} from 'react'
-import axios from 'axios';
+import {useSelector,useDispatch} from "react-redux"
 import './FinancialAssistant.css'
+import { financailAssistant } from '../../Services/Apiservice';
+import {logout} from '../../Redux/Reducers/authslice'
 const FinancialAssistant = () => {
     const [messages, setMessages] = useState([]);
     const [inputMessage, setInputMessage] = useState('');
     const [CanSend,setCanSend] = useState(false);
     const chatContainerRef = useRef(null);
-    
+    const dispatch = useDispatch();
+    const UserDetail = useSelector((state) => state.auth);
     useEffect(() => {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
       const selectHeader = document.querySelector('#header');
@@ -19,20 +22,19 @@ const FinancialAssistant = () => {
   
     async function SendMessage(message){
       try{
-          var Response = await axios.post("http://127.0.0.1:5000/stream",{Question:message});
-          console.log(Response.data);
-          const eventSource = new EventSource("http://127.0.0.1:5000/stream");
-          eventSource.onmessage= (event)=>{
-            console.log(event.data)
-          }
-         
-          eventSource.onopen =(event)=>{
-            console.log("connecting.......")
-          }
-          eventSource.onerror = (error) => {
-            console.error('EventSource failed:', error);
-            eventSource.close();
-          };
+        var data = {
+            "Question":message
+        }
+        financailAssistant(UserDetail.token,data).then((data)=>{
+            console.log(data.Response)
+            const ChatGPtResponse = {
+                text: data.Response,
+                sender: 'chatgpt',
+              };
+            setMessages((prevMessages) => [...prevMessages,ChatGPtResponse ]);
+        }).catch((err)=>{
+            console.log(err);
+        })
       }
       catch(err){
           console.log(err);
@@ -47,22 +49,14 @@ const FinancialAssistant = () => {
             text: inputMessage,
             sender: 'user',
           };
-          //SendMessage(inputMessage)
+         
+          
           // Update the state correctly to append the new user message
           setMessages((prevMessages) => [...prevMessages, userMessage]);
-    
+          //SendMessage(inputMessage)
+          SendMessage(inputMessage)
           setInputMessage('');
     
-          // Simulate ChatGPT response (you can replace this with actual API calls)
-          setTimeout(() => {
-            const chatGPTMessage = {
-              text: 'This is a sample response from ChatGPT.',
-              sender: 'chatgpt',
-            };
-    
-            // Update the state correctly to append the ChatGPT message
-            setMessages((prevMessages) => [...prevMessages, chatGPTMessage]);
-          });
         }
     };
   

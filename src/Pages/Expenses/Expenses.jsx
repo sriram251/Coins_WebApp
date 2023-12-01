@@ -1,28 +1,35 @@
 import React, { useState, useEffect } from 'react';
+import {useSelector,useDispatch} from "react-redux"
 import { DataGrid } from '@mui/x-data-grid';
 import "./Expenses.css"
 import AddExpense from '../../Component/AddExpense/AddExpense';
-
+import {getExpense} from '../../Services/Apiservice'
+import {logout} from '../../Redux/Reducers/authslice'
 const ExpencesTable = () => {
   const [Expences, setExpences] = useState([]);
-
+  const UserDetail = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   useEffect(() => {
     // Fetch documents or set them from your state management library
-    const fetchedExpences = [
-        {
-          id: 1,
-          expense_id: 1,
-          amount: '30.00',
-          category_name: 'Food and Groceries',
-          description: 'Movie night',
-          expense_date: '2023-11-27T00:00:00',
-        },
-        // Add more rows as needed
-      ];
+     
+    GetExpence()
 
-    setExpences(fetchedExpences);
+   
   }, []);
-
+  function GetExpence(){
+    getExpense(UserDetail.token).then((data)=>{
+        console.log(data.Response);
+        setExpences(data.Response);
+     }).catch((err)=>{
+        if (err.response && err.response.status === 401) {
+            // Trigger the logout action when a 401 error occurs
+            dispatch(logout());
+            console.log("ok")
+            window.location.href = "/";
+          }
+        console.log(err)
+     })
+  }
   const columns = [
     { field: 'expense_id', headerName: 'ID', width: 70 },
     { field: 'amount', headerName: 'Amount', width: 130 },
@@ -37,6 +44,7 @@ const ExpencesTable = () => {
     console.log(isUploadpopupOpen)
   };
   const closeUploadpopup = () => {
+    GetExpence()
     setUploadpopupOpen(false);
   };
 
@@ -54,7 +62,13 @@ const ExpencesTable = () => {
 
             </div>
     </div> 
-    <AddExpense isopen={isUploadpopupOpen} onclose={closeUploadpopup}/>
+    {
+       isUploadpopupOpen?
+        <AddExpense isopen={isUploadpopupOpen} onclose={closeUploadpopup}/>
+        :
+        <></>
+    }
+    
     <section id="blog" className="blog">
       <div className="container "  data-aos="fade-up">
         <div className='ExpencesMangerHeader'>
@@ -67,6 +81,7 @@ const ExpencesTable = () => {
                 rows={Expences}
                 columns={columns}
                 pageSize={5}
+                getRowId={(row) => row.expense_id}
                 rowsPerPageOptions={[5, 10, 20]}
                 checkboxSelection
                 disableSelectionOnClick

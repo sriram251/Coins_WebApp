@@ -1,29 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import {useSelector} from "react-redux"
 import { DataGrid } from '@mui/x-data-grid';
 import "./Budgets.css"
 import AddBudget from '../../Component/AddBudget/AddBudget';
-
+import {getBudget} from '../../Services/Apiservice'
 const BudgetsTable = () => {
   const [Budgets, setBudgets] = useState([]);
 
+ 
+
+  const UserDetail = useSelector((state) => state.auth);
   useEffect(() => {
     // Fetch documents or set them from your state management library
-    const fetchedBudgets = [
-        {
-            id: 1,
-            budget_id: 1,
-            budget_amount: '1500.00',
-            category_name: 'Transportation',
-            category_id: 2,
-            month: 11,
-            user_id: 2,
-            year: 2023,
-          },
-      // Add more documents as needed
-    ];
+     
+    GetBudget()
 
-    setBudgets(fetchedBudgets);
+   
   }, []);
+  function GetBudget(){
+    getBudget(UserDetail.token).then((data)=>{
+        console.log(data.Response);
+        setBudgets(data.Response);
+     }).catch((err)=>{
+        console.log(err)
+     })
+  }
 
   const columns = [
     { field: 'budget_id', headerName: 'ID', width: 70 },
@@ -32,6 +33,7 @@ const BudgetsTable = () => {
   { field: 'month', headerName: 'Month', width: 100 },
   { field: 'year', headerName: 'Year', width: 100 },
   ];
+
   const [isUploadpopupOpen, setUploadpopupOpen] = useState(false);
 
   const openUploadpopup = () => {
@@ -40,6 +42,7 @@ const BudgetsTable = () => {
   };
   const closeUploadpopup = () => {
     setUploadpopupOpen(false);
+    GetBudget()
   };
 
   return (
@@ -56,7 +59,14 @@ const BudgetsTable = () => {
 
             </div>
     </div> 
-    <AddBudget isopen={isUploadpopupOpen} onclose={closeUploadpopup}/>
+    {
+        isUploadpopupOpen?
+        <AddBudget isopen={isUploadpopupOpen} onclose={closeUploadpopup}/>
+        :
+        <></>
+
+    }
+    
     <section id="blog" className="blog">
       <div className="container "  data-aos="fade-up">
         <div className='BudgetsMangerHeader'>
@@ -69,6 +79,7 @@ const BudgetsTable = () => {
                 rows={Budgets}
                 columns={columns}
                 pageSize={5}
+                getRowId={(row) => row.budget_id}
                 rowsPerPageOptions={[5, 10, 20]}
                 checkboxSelection
                 disableSelectionOnClick

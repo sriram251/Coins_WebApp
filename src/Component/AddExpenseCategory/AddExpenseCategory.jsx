@@ -1,12 +1,16 @@
 import React,{useState} from 'react'
-import { Modal, Button, Form } from "react-bootstrap";
+import {  Form } from "react-bootstrap";
+import {useSelector,useDispatch} from 'react-redux'
+import {showAlert,hideAlert} from '../../Redux/Reducers/alertslice'
+import {logout} from '../../Redux/Reducers/authslice'
+import {addExpenseCategory} from '../../Services/Apiservice'
 import "./AddExpenseCategory.css"
 function AddExpenseCategory({isopen,onclose}) {
   const [FormData,setFormData]   = useState({
     category_name: "",
   });
-  const [UploadMessage,SetUploadMessage]   = useState("");
-
+  const UserDetail = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   function handleChange(e){
     const { name, value, type, files } = e.target;
     setFormData((prevData) => ({
@@ -21,7 +25,44 @@ function AddExpenseCategory({isopen,onclose}) {
     selectedFile: undefined,})
     onclose()
   }
+  function InsertExpenseCategory(){
+    
+        addExpenseCategory(FormData,UserDetail.token).then((response)=>{
+          dispatch(
+            showAlert({
+              "message":response.message,
+              "alertType":"Success"
+            })
+          )
+          setTimeout(() => {
+            // Hide the alert after the timeout
+            dispatch(
+              hideAlert()
+            );
+          }, 2000);
+        }).catch((err)=>{
 
+          if (err.response && err.response.status === 401) {
+            // Trigger the logout action when a 401 error occurs
+            dispatch(logout());
+            console.log("ok")
+            window.location.href = "/";
+          }
+          dispatch(
+            showAlert({
+              "message":"SomeThing went wrong",
+              "alertType":"warning"
+            })
+          )
+          setTimeout(() => {
+            // Hide the alert after the timeout
+            dispatch(
+              hideAlert()
+            );
+          }, 2000);
+          console.log(err);
+          })
+        }
   return (
     
     <div id="my-modal" className={` modal  justify-content-center ${isopen?"show fade":""}`}tabindex="-1" role="dialog" aria-hidden="true" style={{"display":isopen?"flex":"none","backgroundColor":"#000000b0"}}>
@@ -39,7 +80,8 @@ function AddExpenseCategory({isopen,onclose}) {
                         </Form.Group>
                     </Form>
                     <div className='ModalFooter'>
-                      <button className='btn btn-primary btn-block  text-dark font-weight-bold text-uppercase' onClick={handleClose}>Upload</button>
+                      <button className='btn btn-primary btn-block  text-dark font-weight-bold text-uppercase' onClick={InsertExpenseCategory}>Upload</button>
+                      <button className='btn btn-primary btn-block  text-dark font-weight-bold text-uppercase' onClick={handleClose}>Close</button>
                     </div>
                     </div>
                 </div>

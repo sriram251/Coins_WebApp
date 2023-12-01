@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios from '../AxiosExtension/AxiosExtension';
+
 import {AppService,Endpoints} from '../config';
 
 
@@ -42,210 +43,261 @@ export const register = async (registerData) => {
 };
 
 
-const GetDocuments = async (token)=>{
-    let config = {
-        method: 'get',
-        maxBodyLength: Infinity,
-        url: AppService + Endpoints.GetDocuments,
-        headers: { 
-            'Authorization': 'Bearer '+ token 
-        }
-      };
-      
-      axios.request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+export const GetDocuments = async (token)=>{
+    try{
+        let config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: AppService + Endpoints.GetDocuments,
+            headers: { 
+                'Authorization': 'Bearer '+ token 
+            }
+            
+          };
+          
+         let response = await axios.request(config);
+         
+         return response.data
+    }
+    catch (error) {
+        // Handle errors more explicitly
+        console.error('GetDocuments failed:', error);
+        throw error; // Rethrow the error to be caught by the caller
+      }
+    
+
 }
 
-const GetBudget = async (token)=>{
-    let config = {
+export const getBudget = async (token) => {
+    try {
+      const config = {
         method: 'get',
         maxBodyLength: Infinity,
         url: AppService + Endpoints.Get_Budgets,
-        headers: { 
-            'Authorization': 'Bearer '+ token
+        headers: {
+          'Authorization': 'Bearer ' + token
         }
       };
-      
-      axios.request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-}
-const GetExpense = async (token)=>{
-    let config = {
+  
+      const response = await axios.request(config);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+};
+export const getExpense = async (token) => {
+    try {
+      const config = {
         method: 'get',
         maxBodyLength: Infinity,
         url: AppService + Endpoints.Get_Expenses,
-        headers: { 
-            'Authorization': 'Bearer '+ token
-         }
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
       };
-      
-      axios.request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-}
-const GetExpenseCategory = async (token)=>{
-    let config = {
+  
+      const response = await axios.request(config);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+export const getExpenseCategory = async (token) => {
+    try {
+      const config = {
         method: 'get',
         maxBodyLength: Infinity,
         url: AppService + Endpoints.Get_ExpenseCategorys,
-        headers: { 
-            'Authorization': 'Bearer '+ token
+        headers: {
+          'Authorization': 'Bearer ' + token
         }
       };
-      
-      axios.request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-}
-const GetIncome_sources = async (token)=>{
-    let config = {
+  
+      const response = await axios.request(config);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+
+export const getIncomeSources = async (token) => {
+    try {
+      const config = {
         method: 'get',
         maxBodyLength: Infinity,
         url: AppService + Endpoints.Get_income_sources,
-        headers: { 
-            'Authorization': 'Bearer '+token
+        headers: {
+          'Authorization': 'Bearer ' + token
         }
       };
-      
-      axios.request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-}
+  
+      const response = await axios.request(config);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+};
+  
 
-
-const DeleteDocument = (documentId,token)=>{
-    let config = {
+export const deleteDocument = async (documentId, token) => {
+    try {
+      const config = {
         method: 'delete',
         maxBodyLength: Infinity,
-        url: AppService + Endpoints.DeleteDocument +"/"+documentId,
-        headers: { 
-            'Authorization': 'Bearer '+token
+        url: `${AppService}${Endpoints.DeleteDocument}/${documentId}`,
+        headers: {
+          'Authorization': 'Bearer ' + token
         }
       };
-      
-      axios.request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-}
+  
+      const response = await axios.request(config);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
 
 
-const AddIncomeSource = (Incomesource,token)=>{
-    let data = JSON.stringify(Incomesource);
-      
-      let config = {
+export const addIncomeSource = async (incomeSource, token) => {
+    try {
+      const data = JSON.stringify(incomeSource);
+      const config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: AppService + Endpoints.add_income_source ,
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': 'Bearer '+token
+        url: AppService + Endpoints.add_income_source,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
         },
-        data : data
+        data: data
       };
-      
-      axios.request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-}
+  
+      const response = await axios.request(config);
+      console.log(JSON.stringify(response.data));
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
 
-
-const Add_Expense = (AddExpense,token)=>{
-    let data = JSON.stringify(AddExpense);
-      
-      let config = {
+export const addExpense = async (expenseData, token) => {
+    try {
+      const data = JSON.stringify(expenseData);
+      const config = {
         method: 'post',
         maxBodyLength: Infinity,
         url: AppService + Endpoints.add_Expense,
-        headers: { 
-            'Content-Type': 'application/json', 
-            'Authorization': 'Bearer '+token
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
         },
-        data : data
+        data: data
       };
-      
-      axios.request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-      
-}
-
-const AddBudget = (AddBudget,token)=>{
-
-    let data = JSON.stringify(AddBudget);
-      
-      let config = {
+  
+      const response = await axios.request(config);
+      console.log(JSON.stringify(response.data));
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+  
+export const addBudget = async (budgetData, token) => {
+    try {
+      const data = JSON.stringify(budgetData);
+      const config = {
         method: 'post',
         maxBodyLength: Infinity,
         url: AppService + Endpoints.add_Budget,
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': 'Bearer '+token
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
         },
-        data : data
+        
+        data: data
       };
-      
-      axios.request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-}
-const AddExpenseCategory = (AddBudget,token)=>{
+  
+      console.log(config)
+      const response = await axios.request(config);
+      console.log(JSON.stringify(response.data));
+      return response.data;
+    } catch (error) {
 
-    let data = JSON.stringify(AddBudget);
-      
-      let config = {
+      console.error(error);
+      throw error;
+    }
+  };
+export const addExpenseCategory = async (expenseCategory, token) => {
+    try {
+      const data = JSON.stringify(expenseCategory);
+      const config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: AppService + Endpoints.add_Budget,
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': 'Bearer '+token
+        url: AppService + Endpoints.add_Budget, // Assuming this is correct, you may need to replace it with the actual endpoint for adding expense categories
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
         },
-        data : data
+        data: data
       };
-      
-      axios.request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-}
+  
+      const response = await axios.request(config);
+      console.log(JSON.stringify(response.data));
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+  
+export const addDocument = async (token, documentData) => {
+    try {
+        const config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: AppService + Endpoints.UploadDocument,
+            headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'multipart/form-data'
+            },
+            data: documentData
+        };
+  
+      const response = await axios.request(config);
+      console.log(JSON.stringify(response.data));
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+
+  export const financailAssistant = async (token, Question) => {
+    try {
+        const data = JSON.stringify(Question);
+        const config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: AppService + Endpoints.FinancialAssistant,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+              },
+            data: data
+        };
+  
+      const response = await axios.request(config);
+      console.log(JSON.stringify(response.data));
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };

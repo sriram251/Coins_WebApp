@@ -43,3 +43,15 @@
     transform: rotate(360deg);
   }
 }
+
+.animated-alert {
+  position: fixed !important;
+  top: 20px;
+  right: -300px;
+  z-index: 1999; /* Initial position outside the view */
+  transition: right 0.5s ease-in-out; /* Animation transition */
+}
+
+.animated-alert.show {
+  right: 20px; /* Final position for display */
+}
