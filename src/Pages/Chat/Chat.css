@@ -20,7 +20,7 @@
   
   overflow: hidden;
   width: 80%;
-  background-color: #11111194;
+  background-color: #11111194 !important;
   box-sizing: border-box;
   z-index: 4;
   }
@@ -59,7 +59,9 @@
     .listitem:hover {
       background-color: #305080; /* Hover background color */
     }
-    
+    .SelectedDocument{
+      background-color: #305080;
+    }
   
   /* Chat container to display messages */
   .chat-container {

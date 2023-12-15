@@ -6,7 +6,7 @@ import {logout} from '../../Redux/Reducers/authslice'
 const FinancialAssistant = () => {
     const [messages, setMessages] = useState([]);
     const [inputMessage, setInputMessage] = useState('');
-    const [CanSend,setCanSend] = useState(false);
+    const [CanSend,setCanSend] = useState(true);
     const chatContainerRef = useRef(null);
     const dispatch = useDispatch();
     const UserDetail = useSelector((state) => state.auth);
@@ -31,9 +31,12 @@ const FinancialAssistant = () => {
                 text: data.Response,
                 sender: 'chatgpt',
               };
+            setCanSend(true)
             setMessages((prevMessages) => [...prevMessages,ChatGPtResponse ]);
+           
         }).catch((err)=>{
             console.log(err);
+            setCanSend(true)
         })
       }
       catch(err){
@@ -45,11 +48,12 @@ const FinancialAssistant = () => {
   
     const handleSendMessage = () => {
       if (inputMessage) {
+
           const userMessage = {
             text: inputMessage,
             sender: 'user',
           };
-         
+          setCanSend(false)
           
           // Update the state correctly to append the new user message
           setMessages((prevMessages) => [...prevMessages, userMessage]);
@@ -77,6 +81,11 @@ const FinancialAssistant = () => {
               {message.text}
             </div>
           ))}
+          {
+          !CanSend ? 
+          <span class="loader"></span>
+          :
+          <></> }
         </div>
         <div className="input-container">
           <input
@@ -85,7 +94,15 @@ const FinancialAssistant = () => {
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="Type your message..."
           />
-          <button className="btn-get-started" onClick={handleSendMessage} disabled={CanSend}>Send</button>
+          {
+          !CanSend ? 
+          <div className='LoadingButtion'>
+             <span class="loader"></span>
+          </div>
+         
+          :
+          <button className="btn-get-started" onClick={handleSendMessage} disabled={!CanSend}>Send</button> }
+          
         </div>
       </div>
       </div>

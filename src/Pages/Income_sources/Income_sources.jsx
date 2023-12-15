@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import {useSelector,useDispatch} from "react-redux"
 import { DataGrid } from '@mui/x-data-grid';
-import "./Expenses.css"
+import "./Income_sources.css"
 import AddExpense from '../../Component/AddExpense/AddExpense';
-import {getExpense} from '../../Services/Apiservice'
+import {getIncomeSources} from '../../Services/Apiservice'
 import {logout} from '../../Redux/Reducers/authslice'
-import ExpenseChart from '../../Component/ExpenseGraph/ExpenseGraph';
-const ExpencesTable = () => {
-  const [Expences, setExpences] = useState([]);
+import AddIncomesources from '../../Component/AddIncomeSources/Add_Income_sources';
+import IncomeSourceBarChart from '../../Component/IncomesourceGraph/IncomeSourceGraph';
+const IncomeSourceTable = () => {
+  const [IncomeSource, setIncomeSource] = useState([]);
   const UserDetail = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   useEffect(() => {
     // Fetch documents or set them from your state management library
      
-    GetExpence()
+    GetIncomeSource()
 
    
   }, []);
-  function GetExpence(){
-    getExpense(UserDetail.token).then((data)=>{
+  function GetIncomeSource(){
+    getIncomeSources(UserDetail.token).then((data)=>{
         console.log(data.Response);
-        setExpences(data.Response);
+        setIncomeSource(data.Response);
      }).catch((err)=>{
         if (err.response && err.response.status === 401) {
             // Trigger the logout action when a 401 error occurs
@@ -32,11 +33,10 @@ const ExpencesTable = () => {
      })
   }
   const columns = [
-    { field: 'expense_id', headerName: 'ID', width: 70 },
+    { field: 'source_id', headerName: 'ID', width: 70 },
     { field: 'amount', headerName: 'Amount', width: 130 },
-    { field: 'category_name', headerName: 'Category', width: 200 },
-    { field: 'description', headerName: 'Description', width: 200 },
-    { field: 'expense_date', headerName: 'Expense Date', width: 200 },
+    { field: 'source_name', headerName: 'Source', width: 200 },
+    { field: 'transaction_date', headerName: 'Date', width: 200 },
   ];
   const [isUploadpopupOpen, setUploadpopupOpen] = useState(false);
 
@@ -45,7 +45,7 @@ const ExpencesTable = () => {
     console.log(isUploadpopupOpen)
   };
   const closeUploadpopup = () => {
-    GetExpence()
+    GetIncomeSource()
     setUploadpopupOpen(false);
   };
 
@@ -55,17 +55,17 @@ const ExpencesTable = () => {
     <div className="breadcrumbs d-flex align-items-center ExpencesBGImg" >
             <div className="container position-relative d-flex flex-column align-items-center">
 
-                <h2>Expences</h2>
+                <h2>Income Sources</h2>
                 <ol>
                 <li><a href="index.html">Home</a></li>
-                <li>Expences</li>
+                <li>IncomeSources</li>
                 </ol>
 
             </div>
     </div> 
     {
        isUploadpopupOpen?
-        <AddExpense isopen={isUploadpopupOpen} onclose={closeUploadpopup}/>
+        <AddIncomesources isopen={isUploadpopupOpen} onclose={closeUploadpopup}/>
         :
         <></>
     }
@@ -73,19 +73,19 @@ const ExpencesTable = () => {
     <section id="blog" className="blog">
       <div className="container "  data-aos="fade-up">
         <div className='ExpencesMangerHeader'>
-            <h2 className='ExpencesManagerHeaderText'>Expences</h2>
-            <button className="AddExpencesButton" onClick={openUploadpopup}>Add Expence</button>
+            <h2 className='ExpencesManagerHeaderText'>Income Source</h2>
+            <button className="AddExpencesButton" onClick={openUploadpopup}>Add Income Source</button>
         </div>
         <div>
-          <ExpenseChart expenses={Expences} chartType="weekly"/>
+          <IncomeSourceBarChart incomeSources={IncomeSource}/>
         </div>
         <div className='Expences-grid'>
         <DataGrid
-               
-                rows={Expences}
+                
+                rows={IncomeSource}
                 columns={columns}
                 pageSize={5}
-                getRowId={(row) => row.expense_id}
+                getRowId={(row) => row.source_id}
                 rowsPerPageOptions={[5, 10, 20]}
                 
                 disableSelectionOnClick
@@ -101,4 +101,4 @@ const ExpencesTable = () => {
   );
 };
 
-export default ExpencesTable;
+export default IncomeSourceTable;

@@ -28,10 +28,11 @@ function AddExpenseCategory({isopen,onclose}) {
   function InsertExpenseCategory(){
     
         addExpenseCategory(FormData,UserDetail.token).then((response)=>{
+          console.log(response)
           dispatch(
             showAlert({
               "message":response.message,
-              "alertType":"Success"
+              "alertType":"success"
             })
           )
           setTimeout(() => {
@@ -40,6 +41,7 @@ function AddExpenseCategory({isopen,onclose}) {
               hideAlert()
             );
           }, 2000);
+          handleClose()
         }).catch((err)=>{
 
           if (err.response && err.response.status === 401) {

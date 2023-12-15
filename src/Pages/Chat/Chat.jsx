@@ -1,41 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import {useSelector,useDispatch} from "react-redux"
+import {GetDocuments,DocumentQA} from '../../Services/Apiservice'
+import {logout} from '../../Redux/Reducers/authslice'
 import './Chat.css';
 import'../../assets/css/main.css'
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
-  const [CanSend,setCanSend] = useState(false);
+  const [CanSend,setCanSend] = useState(true);
+  const [SelectedDocument,setSelectedDocument] = useState(0);
+  
   const chatContainerRef = useRef(null);
   const [documents,setdocuments] = useState([]);
-
-  function GetDocuments(){
-    var document =[ {
-      "description": "test",
-      "document_id": 39,
-      "is_encoded": true,
-      "title": "Financials",
-      "upload_date": "2023-11-13T07:29:23.364583",
-      "user_id": 2
-  },
-  {
-    "description": "test2",
-    "document_id": 39,
-    "is_encoded": true,
-    "title": "Financials documents",
-    "upload_date": "2023-11-13T07:29:23.364583",
-    "user_id": 2
-}
-  ] 
-
-  setdocuments(document);
-  }
+  const UserDetail = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     const selectHeader = document.querySelector('#header');
     selectHeader.classList.add('sticked')
-    GetDocuments();
+    GetDocument();
     return () => {
       selectHeader.classList.remove('sticked');
     }
@@ -43,21 +27,22 @@ const Chat = () => {
 
   async function SendMessage(message){
     try{
-        var Response = await axios.post("http://127.0.0.1:5000/stream",{Question:message});
-        console.log(Response.data);
-        const eventSource = new EventSource("http://127.0.0.1:5000/stream");
-        eventSource.onmessage= (event)=>{
-          console.log(event.data)
-        }
-       
-        eventSource.onopen =(event)=>{
-          console.log("connecting.......")
-        }
-        eventSource.onerror = (error) => {
-          console.error('EventSource failed:', error);
-          eventSource.close();
-        };
+      var data = {
+        "Document_id":SelectedDocument,
+    "Question": message
     }
+    DocumentQA(UserDetail.token,data).then((data)=>{
+        
+        const ChatGPtResponse = {
+            text: data.Response.text,
+            sender: 'chatgpt',
+          };
+        setMessages((prevMessages) => [...prevMessages,ChatGPtResponse ]);
+        setCanSend(true)
+    }).catch((err)=>{
+        console.log(err);
+    })
+  }
     catch(err){
         console.log(err);
     }
@@ -71,27 +56,36 @@ const Chat = () => {
           text: inputMessage,
           sender: 'user',
         };
-        //SendMessage(inputMessage)
+        
         // Update the state correctly to append the new user message
         setMessages((prevMessages) => [...prevMessages, userMessage]);
-  
+        setCanSend(false)
+        SendMessage(inputMessage)
         setInputMessage('');
   
         // Simulate ChatGPT response (you can replace this with actual API calls)
-        setTimeout(() => {
-          const chatGPTMessage = {
-            text: 'This is a sample response from ChatGPT.',
-            sender: 'chatgpt',
-          };
-  
-          // Update the state correctly to append the ChatGPT message
-          setMessages((prevMessages) => [...prevMessages, chatGPTMessage]);
-        });
+       
       }
   };
 
+  const selectDoc = (e)=>{
+    setSelectedDocument(e);
+  }
   
-
+  function GetDocument(){
+    GetDocuments(UserDetail.token).then((data)=>{
+        console.log(data.Response);
+        setdocuments(data.Response);
+     }).catch((err)=>{
+        if (err.response && err.response.status === 401) {
+            // Trigger the logout action when a 401 error occurs
+            dispatch(logout());
+            console.log("ok")
+            window.location.href = "/";
+          }
+        console.log(err)
+     })
+  }
 
   return (
     <div className='hero d-flex align-items-stretched '>
@@ -100,7 +94,7 @@ const Chat = () => {
         <ul className='listcontainer'>
         {
             documents.map((data)=>{
-              return <li className='listitem'>
+              return <li className={`listitem ${data.document_id === SelectedDocument ?"SelectedDocument":""}`} key={data.document_id} onClick={(e)=>selectDoc(data.document_id)}>
                 {data.title}
               </li>
             })
@@ -110,24 +104,37 @@ const Chat = () => {
       </div>
       <div className="chat-ui ">
       <div className="chat-container" ref={chatContainerRef}>
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`message ${message.sender}`}
-          >
-            {message.text}
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`message ${message.sender}`}
+            >
+              {message.text}
+            </div>
+          ))}
+          {
+          !CanSend ? 
+          <span class="loader"></span>
+          :
+          <></> }
+        </div>
+        <div className="input-container">
+          <input
+            type="text"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            placeholder="Type your message..."
+          />
+          {
+          !CanSend ? 
+          <div className='LoadingButtion'>
+             <span class="loader"></span>
           </div>
-        ))}
-      </div>
-      <div className="input-container">
-        <input
-          type="text"
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-          placeholder="Type your message..."
-        />
-        <button className="btn-get-started" onClick={handleSendMessage} disabled={CanSend}>Send</button>
-      </div>
+         
+          :
+          <button className="btn-get-started" onClick={handleSendMessage} disabled={!CanSend}>Send</button> }
+          
+        </div>
     </div>
     </div>
     

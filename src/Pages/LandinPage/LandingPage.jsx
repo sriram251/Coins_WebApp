@@ -1,23 +1,24 @@
 import React from 'react'
 
 import '../../assets/css/main.css'
+import './LandingPage.css'
 function LandingPage() {
 
 
   return (
     <div>
         
-        <section id="hero" className="hero d-flex align-items-center">
+    <section id="hero" className="hero d-flex align-items-center">
     <div className="container">
       <div className="row">
         <div className="col-xl-4">
           <h2 data-aos="fade-up">Focus On What Matters</h2>
           <blockquote data-aos="fade-up" data-aos-delay="100">
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perspiciatis cum recusandae eum laboriosam voluptatem repudiandae odio, vel exercitationem officiis provident minima. </p>
+            <p>In the symphony of life's financial orchestration, Insurance is the melody that ensures harmony even in the face of unforeseen notes. </p>
           </blockquote>
           <div className="d-flex" data-aos="fade-up" data-aos-delay="200">
-            <a href="#about" className="btn-get-started">Get Started</a>
-            <a href="https://www.youtube.com/watch?v=LXb3EKWsInQ" className="glightbox btn-watch-video d-flex align-items-center"><i className="bi bi-play-circle"></i><span>Watch Video</span></a>
+            <a href="/Dashboard" className="btn-get-started">Get Started</a>
+            
           </div>
 
         </div>

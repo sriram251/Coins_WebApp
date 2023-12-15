@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import {useDispatch,useSelector} from 'react-redux'
 import { Modal, Button, Form } from "react-bootstrap";
-import {login} from '../../Services/Apiservice'
-import {loginSuccess} from '../../Redux/Reducers/authslice'
+import {register} from '../../Services/Apiservice'
 import {showAlert,hideAlert} from '../../Redux/Reducers/alertslice'
-import './Login.css'
-const LoginModal = ({ onClose,isopen,OpenRegister }) => {
+import './Register.css'
+
+const RegisterModal = ({ onClose,isopen,openLogin }) => {
+  const [username,setusername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -13,14 +14,22 @@ const LoginModal = ({ onClose,isopen,OpenRegister }) => {
     event.preventDefault();
     if(validateinput()){
 
-        let logindata = {
-            "email": email,
-            "password": password
+        let Registerdata = {
+          "username":username,
+          "email":email,
+          "password":password ,
+          "Isadmin": true
           }
-          console.log(logindata);
-          login(logindata).then((data)=>{
-            dispatch(loginSuccess(data))
-            console.log(data);
+         
+          register(Registerdata).then((data)=>{
+            dispatch(showAlert({"message":"User registerd succesfully",
+            "alertType":"Success"}))
+            setTimeout(() => {
+              // Hide the alert after the timeout
+              dispatch(
+                hideAlert()
+              );
+            }, 2000);
             onClose()
         }).catch((error)=>{
           dispatch(
@@ -34,7 +43,7 @@ const LoginModal = ({ onClose,isopen,OpenRegister }) => {
             dispatch(
               hideAlert()
             );
-          }, 2000);
+          }, 4000);
             console.log(error);
         })
     } 
@@ -43,35 +52,50 @@ const LoginModal = ({ onClose,isopen,OpenRegister }) => {
 
   function validateinput(){
     let isvalid = true;
+    if(username.trim() === ""){
+      isvalid = false
+  }
     if(email.trim() === ""){
         isvalid = false
     }
     if(password.trim() === ""){
         isvalid = false
     }
-    if(!isvalid)
-    { dispatch(
-      showAlert({
-        "message":"Please Enter Valid Credential",
-        "alertType":"warning"
-      })
-    )
-    setTimeout(() => {
-      // Hide the alert after the timeout
+    if(!isvalid){
       dispatch(
-        hideAlert()
-      );
-    }, 2000);}
+        showAlert({
+          "message":"Please Enter Valid Credential",
+          "alertType":"warning"
+        })
+      )
+      setTimeout(() => {
+        // Hide the alert after the timeout
+        dispatch(
+          hideAlert()
+        );
+      }, 2000);
+    }
+    
     return isvalid
   }
 
   return (
     <Modal show={isopen} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Login</Modal.Title>
+        <Modal.Title>Register</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="formUserName">
+            <Form.Label>UserName</Form.Label>
+            <Form.Control
+              type="Text"
+              placeholder="Enter UserName"
+              value={username}
+              onChange={(e) => setusername(e.target.value)}
+            />
+            
+          </Form.Group>
           <Form.Group controlId="formEmail">
             <Form.Label>Email address</Form.Label>
             <Form.Control
@@ -93,13 +117,13 @@ const LoginModal = ({ onClose,isopen,OpenRegister }) => {
           </Form.Group>
           
         </Form>
-        <div className="Nav-Register">
-          <a onClick={OpenRegister}>Register?</a>
+        <div className="Nav-login">
+            <a onClick={openLogin}>login?</a>
         </div>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" type="submit" onClick={handleSubmit}>
-                Login
+                Register
           </Button>
         <Button variant="secondary" onClick={onClose}>
           Close
@@ -109,4 +133,4 @@ const LoginModal = ({ onClose,isopen,OpenRegister }) => {
   );
 };
 
-export default LoginModal;
+export default RegisterModal;

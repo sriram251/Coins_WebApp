@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import { Modal, Button, Form } from "react-bootstrap";
+import {Form } from "react-bootstrap";
 import {useSelector,useDispatch} from 'react-redux'
 import {showAlert,hideAlert} from '../../Redux/Reducers/alertslice'
 import {logout} from '../../Redux/Reducers/authslice'
@@ -34,10 +34,7 @@ function FileUpload({isopen,onclose}) {
 
     console.log(FormData);
   }
-  function handleClose(){
-    setFormData({title: "",
-    description: "",
-    selectedFile: undefined,})
+  function handleClose(){ 
     onclose()
   }
 
@@ -48,12 +45,19 @@ function FileUpload({isopen,onclose}) {
     data.append('Title', Uploadfile.title);
     
     addDocument(UserDetail.token,data).then((response)=>{
+      console.log(response);
       dispatch(
         showAlert({
-          "message":response,
-          "alertType":"Success"
+          "message":response.data,
+          "alertType":"success"
         })
       )
+      setTimeout(() => {
+        // Hide the alert after the timeout
+        dispatch(
+          hideAlert()
+        );
+      }, 2000);
       
       console.log(data);
     }).catch((err)=>{
@@ -64,7 +68,10 @@ function FileUpload({isopen,onclose}) {
         window.location.href = "/";
       }
       dispatch(
-        hideAlert()
+        showAlert({
+          "message":"something went wrong please try again",
+          "alertType":"warning"
+        })
       )
       console.log(err);
     })

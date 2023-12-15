@@ -57,6 +57,7 @@ const ExpenceCategoryTable = () => {
   };
   const closeUploadpopup = () => {
     setUploadpopupOpen(false);
+    GetExpenceCategory()
   };
 
   return (
@@ -93,7 +94,7 @@ const ExpenceCategoryTable = () => {
                 pageSize={5}
                 getRowId={(row) => row.category_id}
                 rowsPerPageOptions={[5, 10, 20]}
-                checkboxSelection
+                
                 disableSelectionOnClick
             />
         </div>

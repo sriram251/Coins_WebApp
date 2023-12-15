@@ -65,7 +65,7 @@ function AddBudget({isopen,onclose}) {
       dispatch(
         showAlert({
           "message":response.message,
-          "alertType":"Success"
+          "alertType":"success"
         })
       )
       setTimeout(() => {
@@ -74,6 +74,7 @@ function AddBudget({isopen,onclose}) {
           hideAlert()
         );
       }, 2000);
+      onclose()
     }).catch((err)=>{
 
       if (err.response && err.response.status === 401) {

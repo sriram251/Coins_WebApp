@@ -1,0 +1,7 @@
+.hero:after {
+    position: absolute;
+    display: none;
+    background: var(--color-secondary);
+    top: 0;
+    bottom: 0;
+}

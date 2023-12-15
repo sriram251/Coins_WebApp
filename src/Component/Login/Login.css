@@ -1,0 +1,10 @@
+.Nav-Register{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 10px;
+    color: #489cc4;
+}
+.Nav-Register a{
+    cursor: pointer;
+}

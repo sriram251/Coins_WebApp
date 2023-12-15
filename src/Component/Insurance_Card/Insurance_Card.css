@@ -1,0 +1,31 @@
+.blog-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin: 25px 0px;
+  }
+  .blog-title {
+    color: #333;
+  }
+  .blog-excerpt {
+    color: #555;
+  }
+  .read-more {
+    color: #007bff;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+  }
+  .blog-category .category-tag {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0.2em 0.5em;
+    background-color: #3498db; /* or any color you prefer */
+    color: #fff; /* text color */
+    border-radius: 3px;
+    transform: translateY(-50%);
+    z-index: 1; 
+  }

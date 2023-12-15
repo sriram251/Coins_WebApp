@@ -4,9 +4,10 @@ import { DataGrid } from '@mui/x-data-grid';
 import "./Budgets.css"
 import AddBudget from '../../Component/AddBudget/AddBudget';
 import {getBudget} from '../../Services/Apiservice'
+import BudgetPieChart from '../../Component/BudgetGraph/BudgetGraph';
 const BudgetsTable = () => {
   const [Budgets, setBudgets] = useState([]);
-
+  
  
 
   const UserDetail = useSelector((state) => state.auth);
@@ -33,7 +34,7 @@ const BudgetsTable = () => {
   { field: 'month', headerName: 'Month', width: 100 },
   { field: 'year', headerName: 'Year', width: 100 },
   ];
-
+ 
   const [isUploadpopupOpen, setUploadpopupOpen] = useState(false);
 
   const openUploadpopup = () => {
@@ -73,6 +74,9 @@ const BudgetsTable = () => {
             <h2 className='BudgetsManagerHeaderText'>Budgets</h2>
             <button className="AddBudgetsButton" onClick={openUploadpopup}>Add Budget</button>
         </div>
+        <div>
+          <BudgetPieChart budgets={Budgets}/>
+        </div>
         <div className='Budgets-grid'>
         <DataGrid
                
@@ -81,7 +85,7 @@ const BudgetsTable = () => {
                 pageSize={5}
                 getRowId={(row) => row.budget_id}
                 rowsPerPageOptions={[5, 10, 20]}
-                checkboxSelection
+                
                 disableSelectionOnClick
             />
         </div>

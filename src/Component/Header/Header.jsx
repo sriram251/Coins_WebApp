@@ -18,6 +18,8 @@ function Header({ onOpen}) {
     dispatch(logout())
   }
   console.log(UserDetail)
+  const url = window.location.pathname;
+  console.log(url)
   return (
     <header id="header" className="header d-flex align-items-center fixed-top">
     <div className="container-fluid container-xl d-flex align-items-center justify-content-between">
@@ -25,7 +27,7 @@ function Header({ onOpen}) {
       <Link  to="/" className="logo d-flex align-items-center">
        
         
-        <h1 className="d-flex align-items-center">Nova</h1>
+        <h1 className="d-flex align-items-center">Coins</h1>
       </Link>
 
       <i className="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
@@ -33,15 +35,18 @@ function Header({ onOpen}) {
 
       <nav id="navbar" className="navbar">
         <ul>
-          <li><Link to="/" className="active">Home</Link></li>
-          <li><Link to="/about">About</Link></li>
-          
-
-
+          <li><Link to="/" className={`${url==='/'?"active":""}`}>Home</Link></li>
           {UserDetail.isAuthenticated ? 
           <>
-          <li><Link to="/Dashboard">Dashboard</Link></li>
-          <li><Link to="/InsuranceAssistant">InsuranceAssistant</Link></li>
+          <li><Link to="/Dashboard" className={`${url==='/Dashboard'?"active":""}`}>Dashboard</Link></li>
+          <li className="dropdown"><Link><span>Insurance</span> <i className="bi bi-chevron-down dropdown-indicator"></i></Link>
+            <ul>
+            <li><Link to="/InsuraceSchemes"className={`${url==='/InsuraceSchemes'?"active":""}`}>Insurace Schemes</Link></li>
+            <li><Link to="/InsuranceAssistant"className={`${url==='/InsuranceAssistant'?"active":""}`}>Insurance Assistant</Link></li>
+            </ul>
+          </li>
+       
+          <li><Link to="/IncomeSource">Income Source</Link></li>
           <li className="dropdown"><Link><span>Finance</span> <i className="bi bi-chevron-down dropdown-indicator"></i></Link>
             <ul>
               <li><Link to="/DocumentQ&A">DocumentQ&A</Link></li>
@@ -57,7 +62,7 @@ function Header({ onOpen}) {
             <div className='LoggedinContainer'>
                     <PersonIcon />
 
-                   
+                    {UserDetail.username}
                     <ExitToAppIcon onClick={Logout}/>
                   </div>
           </li>

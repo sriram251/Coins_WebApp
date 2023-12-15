@@ -283,7 +283,7 @@ section {
   }
 
   .navbar a,
-  .navbar a:focus {
+  .navbar a:focus{
     display: flex;
     align-items: center;
     justify-content: space-between;

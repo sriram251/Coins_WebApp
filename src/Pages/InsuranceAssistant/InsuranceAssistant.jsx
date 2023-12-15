@@ -1,62 +1,81 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import {useSelector,useDispatch} from 'react-redux'
 import './InsuranceAssistant.css';
 import'../../assets/css/main.css'
+import {logout} from '../../Redux/Reducers/authslice'
+import {ChatWithInsuranceAssistant, GetInsuranceSchemes} from '../../Services/Apiservice'
+import {OpenInBrowserRounded} from "@mui/icons-material"
+import { Link } from 'react-router-dom';
 const InsuranceAssistant = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
-  const [CanSend,setCanSend] = useState(false);
+  const [CanSend,setCanSend] = useState(true);
   const chatContainerRef = useRef(null);
-  const [documents,setdocuments] = useState([]);
+  const [InsuranceSchemes, setInsuranceSchemes] = useState([]);
+  const [selectedSchemes,SetselectedSchemes] = useState([])
+  const UserDetail = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+ 
+  function Get_InsuranceSchemes(){
 
-  function GetDocuments(){
-    var document =[ {
-      "description": "test",
-      "document_id": 39,
-      "is_encoded": true,
-      "title": "Financials",
-      "upload_date": "2023-11-13T07:29:23.364583",
-      "user_id": 2
-  },
-  {
-    "description": "test2",
-    "document_id": 39,
-    "is_encoded": true,
-    "title": "Financials documents",
-    "upload_date": "2023-11-13T07:29:23.364583",
-    "user_id": 2
-}
-  ] 
-
-  setdocuments(document);
+    console.log(UserDetail)
+    GetInsuranceSchemes(UserDetail.token).then((data)=>{
+        console.log(data.Response);
+        setInsuranceSchemes(data.Response);
+        
+     }).catch((err)=>{
+        if (err.response && err.response.status === 401) {
+            // Trigger the logout action when a 401 error occurs
+            dispatch(logout());
+            console.log("ok")
+            window.location.href = "/";
+          }
+        console.log(err)
+     })
   }
+
+  
 
   useEffect(() => {
     chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     const selectHeader = document.querySelector('#header');
     selectHeader.classList.add('sticked')
-    GetDocuments();
+    
     return () => {
       selectHeader.classList.remove('sticked');
     }
   }, [messages]);
+  useEffect(() => {
+    
+    Get_InsuranceSchemes()
+    
+  }, []);
+  useEffect(() => {
+    
+    GetRelatedSchemes([])
+    
+  }, [InsuranceSchemes]);
 
   async function SendMessage(message){
     try{
-        var Response = await axios.post("http://127.0.0.1:5000/stream",{Question:message});
-        console.log(Response.data);
-        const eventSource = new EventSource("http://127.0.0.1:5000/stream");
-        eventSource.onmessage= (event)=>{
-          console.log(event.data)
-        }
-       
-        eventSource.onopen =(event)=>{
-          console.log("connecting.......")
-        }
-        eventSource.onerror = (error) => {
-          console.error('EventSource failed:', error);
-          eventSource.close();
-        };
+      var data = {
+          "Question":message
+      }
+      setCanSend(false)
+      ChatWithInsuranceAssistant(UserDetail.token,data).then((data)=>{
+          console.log(data.Response)
+          const ChatGPtResponse = {
+              text: data,
+              sender: 'chatgpt',
+            };
+          setCanSend(true)
+          setMessages((prevMessages) => [...prevMessages,ChatGPtResponse ]);
+          GetRelatedSchemes(data.schemes)
+         
+      }).catch((err)=>{
+          console.log(err);
+          setCanSend(true)
+      })
     }
     catch(err){
         console.log(err);
@@ -64,7 +83,6 @@ const InsuranceAssistant = () => {
     
 
   }
-
   const handleSendMessage = () => {
     if (inputMessage) {
         const userMessage = {
@@ -74,22 +92,25 @@ const InsuranceAssistant = () => {
         //SendMessage(inputMessage)
         // Update the state correctly to append the new user message
         setMessages((prevMessages) => [...prevMessages, userMessage]);
-  
+        SendMessage(inputMessage)
         setInputMessage('');
   
         // Simulate ChatGPT response (you can replace this with actual API calls)
-        setTimeout(() => {
-          const chatGPTMessage = {
-            text: 'This is a sample response from ChatGPT.',
-            sender: 'chatgpt',
-          };
-  
-          // Update the state correctly to append the ChatGPT message
-          setMessages((prevMessages) => [...prevMessages, chatGPTMessage]);
-        });
+       
       }
   };
-
+  const GetRelatedSchemes = (selectedSchemes)=>{
+    if(selectedSchemes.length === 0){
+      SetselectedSchemes(InsuranceSchemes);
+      console.log(selectedSchemes);
+    }
+    else{
+      let result = InsuranceSchemes.filter((data)=>{
+        return selectedSchemes.includes(data.scheme_id)
+      });
+      SetselectedSchemes(result)
+    }
+  }
   
 
 
@@ -99,9 +120,15 @@ const InsuranceAssistant = () => {
         <h2>Schemes</h2>
         <ul className='listcontainer'>
         {
-            documents.map((data)=>{
+            selectedSchemes.map((data)=>{
               return <li className='listitem'>
-                {data.title}
+                <div className='InsuranceeSchemContainer'>
+                  {data.scheme_name}
+                 <Link to={"/InsuraceScheme/"+data.scheme_id}>
+                  <OpenInBrowserRounded/>
+                 </Link>
+                </div>
+                
               </li>
             })
           }
@@ -111,24 +138,48 @@ const InsuranceAssistant = () => {
       <div className="Insurance-chat-ui ">
       <h2 className='Assistantheader'>Insurance Assistant</h2>
       <div className="chat-container" ref={chatContainerRef}>
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`message ${message.sender}`}
-          >
-            {message.text}
+          {messages.map((message, index) => {
+            if( message.sender === 'user'){
+              
+              return  <div
+              key={index}
+              className={`message ${message.sender}`}
+              onClick={()=>(GetRelatedSchemes([]))}
+            >
+              {message.text}
+            </div>
+            }
+            return <div
+              key={index}
+              className={`message ${message.sender}`}
+              onClick={()=>(GetRelatedSchemes(message.text.schemes))}
+            >
+              {message.text.Response.text}
+            </div>
+          })}
+          {
+          !CanSend ? 
+          <span class="loader"></span>
+          :
+          <></> }
+        </div>
+        <div className="input-container">
+          <input
+            type="text"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            placeholder="Type your message..."
+          />
+          {
+          !CanSend ? 
+          <div className='LoadingButtion'>
+             <span class="loader"></span>
           </div>
-        ))}
-      </div>
-      <div className="input-container">
-        <input
-          type="text"
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-          placeholder="Type your message..."
-        />
-        <button className="btn-get-started" onClick={handleSendMessage} disabled={CanSend}>Send</button>
-      </div>
+         
+          :
+          <button className="btn-get-started" onClick={handleSendMessage} disabled={!CanSend}>Send</button> }
+          
+        </div>
     </div>
     </div>
     

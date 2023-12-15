@@ -1,4 +1,4 @@
-export const AppService = "http://localhost:5000/"
+export const AppService = "https://mind-benders-2.azurewebsites.net/"
 export const Endpoints = {
     "Login":"login",
     "Register":"register",
@@ -15,4 +15,12 @@ export const Endpoints = {
     "QAdocument":"QAdocument",
     "UploadDocument":"UploadDocument",
     "FinancialAssistant":"FinancialAssistant",
+    "Get_InsuranceScheme":"Get_InsuranceScheme",
+    "add_insurance_scheme":"add_insurance_scheme",
+    "SummarizeDocument":"SummarizeDocument",
+    "Get_InsuranceCategory":"Get_InsuranceCategory",
+    "Get_insurance_schemeByID":"Get_insurance_scheme/",
+    "QAInsuranceScheme":"QAInsuranceScheme",
+    "downloadScheme":"downloadScheme/",
+    "InsuranceAssistant":"InsuranceAssistant"
 }

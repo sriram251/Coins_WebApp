@@ -1,77 +1,118 @@
-.container
-{
-    display: grid;
-
+.hero {
+  width: 100%;
+  max-height: 100vh;
+  background: url("../../assets/img/portfolio-header.jpg") top center;
+  background-size: cover;
+  position: relative;
+  padding: 93px 0;
+  z-index: 3;
+  display:flex;
+  justify-content: center;
 }
-
-.top 
-{
-    display: grid;
-    width: 100%;
-    border: 1px solid black;
-    background-color: white;
-    border-radius: 15px;
-    row-gap: 20px;
+.DashboardGraphs h2{
+  font-size: 24px;
+  font-family: 'Montserrat';
+  color: black;
 }
-
-.top-row
-{
+.DashboardContainer {
+  display: flex;
+  flex-direction: column;
+  height: 87vh;
+  
+  overflow: scroll;
+  width: 100%;
+  background-color: #11111194;
+  box-sizing: border-box;
+  z-index: 4;
+  }
+  .quick_activity_wrap {
     display: grid;
-    grid-template-columns: 2fr 100px;
-    gap: 20px;
-}
-
-.top-row-col
-{
+    grid-template-columns: repeat(4,1fr);
+    grid-gap: 30px;
+    margin-bottom: 50px;
     padding: 10px;
 }
-
-.top-row-col-logo2
-{
-    margin-left: -10px;
+.DashboardGraphs .Dashboard-Icome-Budget{
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-gap: 10px;
+  padding: 10px;
+}
+  
+.single_quick_activity {
+  background-color: #fff;
+  border-radius: 10px;
+  -webkit-transition: .5s;
+  transition: .5s;
+  padding: 41px 30px;
+  position: relative;
+  background: #3b76ef
 }
 
-.top-row-col label
-{
-    width: 100%;
-    font-size: 10px;
+ .single_quick_activity:nth-child(2) {
+  background: #63c7ff
 }
 
-.top-row-col span
-{
-    font-weight: bold;
+ .single_quick_activity:nth-child(3) {
+  background: #a66dd4
 }
 
-.hero {
-    width: 100%;
-    min-height: 100vh;
-    background: url("../../assets/img/portfolio-header.jpg") top center;
-    background-size: cover;
-    position: relative;
-    padding: 120px 0;
-    z-index: 3;
-  }
-  
-  @media (min-width: 1034px) {
-    .hero:after {
-      position: absolute;
-      content: "";
-      width: 0%;
-      background: var(--color-secondary);
-      top: 0;
-      bottom: 0;
-    }
-  }
-  
-  .hero:before {
-    position: absolute;
-    content: "";
-    background: rgba(27, 47, 69, 0.6);
-    inset: 0;
-  }
-  
-  @media (max-width: 1034px) {
-    .hero:before {
-      background: rgba(27, 47, 69, 0.7);
-    }
-  }
+ .single_quick_activity:nth-child(4) {
+  background: #6dd4b1
+}
+ .single_quick_activity::before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  content: '';
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  -webkit-transition: .5s;
+  transition: .5s;
+  background-size: cover
+}
+.single_quick_activity:hover::before {
+  background-image: url("../../assets/img/diamond.png");
+}  
+
+.single_quick_activity h4 {
+  font-size: 17px;
+  margin-bottom: 0;
+  font-weight: 700;
+  -webkit-transition: .5s;
+  transition: .5s;
+  color: #fff;
+  margin-bottom: 12px
+}
+
+.single_quick_activity h3 {
+  font-size: 30px;
+  line-height: 40px;
+  margin-bottom: 0;
+  font-weight: 900;
+  -webkit-transition: .5s;
+  transition: .5s;
+  color: #fff;
+  margin-bottom: 7px
+}
+
+.single_quick_activity p {
+  -webkit-transition: .5s;
+  transition: .5s;
+  font-size: 13px;
+  font-weight: 400;
+  color: #fff
+}
+
+ .single_quick_activity:hover {
+  background: #3b76ef
+}
+.DashboardGraphs{
+  background-color: white;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+}

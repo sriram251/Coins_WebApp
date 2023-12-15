@@ -7,8 +7,9 @@ import ChatIcon from '@mui/icons-material/Chat';
 import "./DocumentGrid.css"
 import FileUpload from "../../Component/FileUpload/FileUpload"
 import '../../assets/css/main.css'
-import {GetDocuments} from '../../Services/Apiservice'
+import {GetDocuments,deleteDocument} from '../../Services/Apiservice'
 import {logout} from '../../Redux/Reducers/authslice'
+import {showAlert,hideAlert} from '../../Redux/Reducers/alertslice'
 const DocumentTable = () => {
   const [documents, setDocuments] = useState([]);
   const UserDetail = useSelector((state) => state.auth);
@@ -21,6 +22,7 @@ const DocumentTable = () => {
    
   }, []);
   function GetDocument(){
+    console.log(UserDetail)
     GetDocuments(UserDetail.token).then((data)=>{
         console.log(data.Response);
         setDocuments(data.Response);
@@ -35,6 +37,43 @@ const DocumentTable = () => {
      })
   }
  
+  function DeleteDocument(document_id){
+    deleteDocument(document_id,UserDetail.token).then((response)=>{
+      dispatch(
+        showAlert({
+          "message":response.Response,
+          "alertType":"Success"
+        })
+      )
+      setTimeout(() => {
+        // Hide the alert after the timeout
+        dispatch(
+          hideAlert()
+        );
+      }, 2000);
+
+    }).catch((err)=>{
+      if (err.response && err.response.status === 401) {
+        // Trigger the logout action when a 401 error occurs
+        dispatch(logout());
+        console.log("ok")
+        window.location.href = "/";
+      }
+      dispatch(
+        showAlert({
+          "message":"SomeThing went wrong",
+          "alertType":"warning"
+        })
+      )
+      setTimeout(() => {
+        // Hide the alert after the timeout
+        dispatch(
+          hideAlert()
+        );
+      }, 2000);
+       console.log(err)
+    })
+  }
   const columns = [
     { field: 'document_id', headerName: 'ID', width: 70 },
     { field: 'title', headerName: 'Title', width: 150 },
@@ -59,7 +98,7 @@ const DocumentTable = () => {
              // Adjust opacity for disabled state
           }}
           
-          onClick={() => console.log(params.id)} // Add your chat logic here
+          onClick={() =>  DeleteDocument(params.id)} // Add your chat logic here
         />// Add your chat logic here
         ),
       },
@@ -88,8 +127,9 @@ const DocumentTable = () => {
   };
   const closeUploadpopup = () => {
     
-    setUploadpopupOpen(false);
-    GetDocuments()
+    setUploadpopupOpen(false); 
+    GetDocument()
+   
   };
 
   return (
@@ -126,7 +166,7 @@ const DocumentTable = () => {
                 pageSize={5}
                 getRowId={(row) => row.document_id}
                 rowsPerPageOptions={[5, 10, 20]}
-                checkboxSelection
+                
                 disableSelectionOnClick
             />
         </div>

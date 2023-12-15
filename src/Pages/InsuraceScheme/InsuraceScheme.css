@@ -1,0 +1,82 @@
+.InsuranceSchemeContainer{
+    display: flex;
+    flex-direction: column;
+     align-items: center;
+     padding: 40px 0px;
+
+
+}
+
+.loading-blue{
+    color: aqua;
+
+}
+.InsuranceschemsHeader{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.download-button {
+    display: flex;
+    align-items: center;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .download-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .category-tag {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #e0e0e0;
+    border-radius: 15px;
+    margin-right: 5px;
+  }
+  .InsuranceCategory{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+  }
+  .ReadMoreButton{
+    font-family: var(--font-secondary);
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 50px;
+    transition: 0.5s;
+    color: #fff;
+    border: none;
+    background: var(--color-primary);
+  }
+  .InsurancetwoColumn{
+    display: grid;
+    align-items: center;
+    gap: 20px;
+    grid-template-columns: 40% 40%;
+    justify-items: start;
+
+  }
+  .InsuranceDescription{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+  }
+  .SchemeActive{
+    color: #314357;
+    border: none;
+  }
+  .IconContainer{
+    display: flex;
+    gap: 10px;
+  }

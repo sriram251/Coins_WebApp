@@ -138,4 +138,9 @@
       margin-left: 10px;
       cursor: pointer;
     }
-    
+    .InsuranceeSchemContainer{
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      justify-content: space-between;
+    }

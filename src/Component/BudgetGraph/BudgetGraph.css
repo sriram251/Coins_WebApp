@@ -1,0 +1,26 @@
+.BudgetGraph .GraphContainer{
+    max-width: 100%;
+    max-height: 500px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.FilterConatainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.SpecificFilter{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 10px;
+}
+.NoDataDisplayContainer{
+    text-align: center;
+    padding: 10px;
+    font-size: 20px;
+    font-family: 'Montserrat';
+    font-weight: 500;
+}
