@@ -17,7 +17,7 @@ const DocumentTable = () => {
   useEffect(() => {
     // Fetch documents or set them from your state management library
     GetDocument()
-  });
+  },[]);
   function GetDocument(){
     console.log(UserDetail)
     GetDocuments(UserDetail.token).then((data)=>{
@@ -39,7 +39,7 @@ const DocumentTable = () => {
       dispatch(
         showAlert({
           "message":response.Response,
-          "alertType":"Success"
+          "alertType":"success"
         })
       )
       setTimeout(() => {
@@ -48,6 +48,7 @@ const DocumentTable = () => {
           hideAlert()
         );
       }, 2000);
+      GetDocument()
 
     }).catch((err)=>{
       if (err.response && err.response.status === 401) {

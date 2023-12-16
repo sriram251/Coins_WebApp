@@ -85,7 +85,7 @@ function AddInsuranceScheme({isopen,onclose}) {
       dispatch(
         showAlert({
           "message":"Got document Summary",
-          "alertType":"Success"
+          "alertType":"success"
         })
       )
       setIsLoading(false)

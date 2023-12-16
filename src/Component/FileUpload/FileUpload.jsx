@@ -18,12 +18,37 @@ function FileUpload({isopen,onclose}) {
     const { name, type, files } = e.target;
 
     // Check if the input type is 'file'
-    if (type === 'file') {
+    if (type === 'file' && files[0]) {
+      const selectedFile = files[0];
+      if (selectedFile.type === 'application/pdf') {
+
+        // Check if the file size is less than 1MB
+        if (selectedFile.size <= 1024 * 1024) {
+          // File is valid, update the state
+          setFormData((prevData) => ({
+            ...prevData,
+            selectedFile: selectedFile,
+          }));
+        } else {
+          // File size exceeds 1MB, show an error message or take appropriate action
+          alert('File size must be less than 1MB');
+          e.target.value = null;
+          setFormData((prevData) => ({
+            ...prevData,
+            selectedFile: null,
+          }));
+        }
+      } else {
+        // File is not a PDF, show an error message or take appropriate action
+        alert('Please select a PDF file');
+        e.target.value = null;
+        setFormData((prevData) => ({
+          ...prevData,
+          selectedFile: null,
+        }));
+      }
       // Update the state with the selected file
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: files[0],
-      }));
+     
     } else {
       // For non-file inputs, update the state with the input value
       setFormData((prevData) => ({
@@ -58,8 +83,8 @@ function FileUpload({isopen,onclose}) {
           hideAlert()
         );
       }, 2000);
+      onclose()
       
-      console.log(data);
     }).catch((err)=>{
       if (err.response && err.response.status === 401) {
         // Trigger the logout action when a 401 error occurs

@@ -19,11 +19,16 @@ const Chat = () => {
     chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     const selectHeader = document.querySelector('#header');
     selectHeader.classList.add('sticked')
-    GetDocument();
+   
     return () => {
       selectHeader.classList.remove('sticked');
     }
   }, [messages]);
+  useEffect(() => {
+    
+    GetDocument();
+    
+  }, []);
 
   async function SendMessage(message){
     try{
