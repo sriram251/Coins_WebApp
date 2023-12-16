@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {useSelector,useDispatch} from "react-redux"
 import "bootstrap/dist/css/bootstrap.min.css";
 import {getExpense,getBudget,getIncomeSources} from '../../Services/Apiservice'
@@ -8,13 +8,10 @@ import ExpenseChart from "../../Component/ExpenseGraph/ExpenseGraph";
 import IncomeSourceBarChart from "../../Component/IncomesourceGraph/IncomeSourceGraph";
 import BudgetPieChart from "../../Component/BudgetGraph/BudgetGraph";
 const Home = () => {
-  const [totalIncome, setTotalIncome] = useState(0);
-  const [totalBudget, setTotalBudget] = useState(0);
-  const [totalExpense, setTotalExpense] = useState(0);
+
   const [IncomeSource, setIncomeSource] = useState([]);
   const [Expences, setExpences] = useState([]);
   const [Budgets, setBudgets] = useState([]);
-  const chatContainerRef = useRef(null);
   const UserDetail = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -52,13 +49,6 @@ const Home = () => {
       currency: 'INR', // Specify the currency code for Indian Rupees
     }).format(sum);
     return formattedCurrency;
-  }
-  const FormateCurrency = (sum)=>{
-    let formattedCurrency = new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR', // Specify the currency code for Indian Rupees
-    }).format(sum);
-    return formattedCurrency
   }
   const Getcashonhand = ()=>{
     let incomes =  IncomeSource.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue.amount), 0);

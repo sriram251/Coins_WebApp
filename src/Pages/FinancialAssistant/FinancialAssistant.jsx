@@ -2,13 +2,11 @@ import React,{useState,useEffect,useRef} from 'react'
 import {useSelector,useDispatch} from "react-redux"
 import './FinancialAssistant.css'
 import { financailAssistant } from '../../Services/Apiservice';
-import {logout} from '../../Redux/Reducers/authslice'
 const FinancialAssistant = () => {
     const [messages, setMessages] = useState([]);
     const [inputMessage, setInputMessage] = useState('');
     const [CanSend,setCanSend] = useState(true);
     const chatContainerRef = useRef(null);
-    const dispatch = useDispatch();
     const UserDetail = useSelector((state) => state.auth);
     useEffect(() => {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;

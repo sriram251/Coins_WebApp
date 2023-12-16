@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {useDispatch,useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 import { Modal, Button, Form } from "react-bootstrap";
 import {register} from '../../Services/Apiservice'
 import {showAlert,hideAlert} from '../../Redux/Reducers/alertslice'
