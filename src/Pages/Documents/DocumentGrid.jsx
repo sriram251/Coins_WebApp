@@ -16,11 +16,8 @@ const DocumentTable = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     // Fetch documents or set them from your state management library
-     
     GetDocument()
-
-   
-  }, []);
+  });
   function GetDocument(){
     console.log(UserDetail)
     GetDocuments(UserDetail.token).then((data)=>{
