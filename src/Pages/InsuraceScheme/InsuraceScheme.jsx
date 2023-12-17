@@ -56,6 +56,7 @@ function InsuraceScheme() {
         setIsLoading(false)
      })
   }
+
   const openChatpopup = () => {
     setUploadpopupOpen(true);
     
@@ -65,6 +66,9 @@ function InsuraceScheme() {
     setUploadpopupOpen(false); 
    
   };
+  function GoBack(){
+    window.location.href = "/InsuraceSchemes";
+  }
   useEffect(() => {
         Get_InsuranceSchemes(SchemeId)
         const selectHeader = document.querySelector('#header');
@@ -97,7 +101,7 @@ function InsuraceScheme() {
 
                     
                 <div>
-                <button className="ReadMoreButton" onClick={toggleDescription}>
+                <button className="ReadMoreButton" onClick={()=>GoBack()}>
                 &#8592; back
              </button>
                 </div>
@@ -105,8 +109,8 @@ function InsuraceScheme() {
 
                     <h2>{InsuranceSchemes.scheme_name}</h2>
                     <div className='IconContainer'>
-                        <button className='SchemeActive' onClick={openChatpopup} disabled={!InsuranceSchemes.isencoded}><ChatBubbleOutline  /></button>
-                        <button className='SchemeActive' onClick={DownloadScheme}><FileDownload /> </button>
+                        <button className={`SchemeActive ${!InsuranceSchemes.isencoded? 'SchemeInActive':''}`} onClick={openChatpopup} disabled={!InsuranceSchemes.isencoded}><ChatBubbleOutline  /></button>
+                        {/* <button className='SchemeActive' onClick={DownloadScheme}><FileDownload /> </button> */}
                     </div>
                     
                 </div>

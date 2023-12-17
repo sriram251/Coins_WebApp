@@ -159,4 +159,19 @@
         transform: rotate(-360deg);
       }
     }
-       
+    .chatmessageContainer table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #ffffff; /* White background */
+      color: #000000; /* Black text color */
+    }
+
+    .chatmessageContainer th, .chatmessageContainer td {
+      border: 1px solid #000000; /* Black border */
+      padding: 12px;
+      text-align: left;
+    }
+
+    .chatmessageContainer th {
+      background-color: #f2f2f2; /* Light gray background for header */
+    }

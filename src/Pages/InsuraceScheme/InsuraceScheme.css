@@ -75,6 +75,10 @@
   .SchemeActive{
     color: #314357;
     border: none;
+    background: none;
+  }
+  .SchemeInActive{
+    color: #858282;
   }
   .IconContainer{
     display: flex;

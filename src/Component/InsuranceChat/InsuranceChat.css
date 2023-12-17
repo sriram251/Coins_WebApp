@@ -100,7 +100,7 @@ small{
     
     overflow: hidden;
     width: 100%;
-    background-color: #e7e7e794;
+    background-color: #e7e7e794 !important;
     box-sizing: border-box;
     z-index: 4;
 }

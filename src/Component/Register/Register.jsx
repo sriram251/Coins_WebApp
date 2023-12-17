@@ -125,7 +125,7 @@ const RegisterModal = ({ onClose,isopen,openLogin }) => {
         <Button variant="primary" type="submit" onClick={handleSubmit}>
                 Register
           </Button>
-        <Button variant="secondary" onClick={onClose}>
+        <Button className="secondary" variant="secondary" onClick={onClose}>
           Close
         </Button>
       </Modal.Footer>

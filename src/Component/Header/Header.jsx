@@ -45,16 +45,20 @@ function Header({ onOpen}) {
             <li><Link to="/InsuranceAssistant"className={`${url==='/InsuranceAssistant'?"active":""}`}>Insurance Assistant</Link></li>
             </ul>
           </li>
-       
-          <li><Link to="/IncomeSource">Income Source</Link></li>
           <li className="dropdown"><Link><span>Finance</span> <i className="bi bi-chevron-down dropdown-indicator"></i></Link>
             <ul>
-              <li><Link to="/DocumentQ&A">DocumentQ&A</Link></li>
-              <li><Link to="/Documents">Documents</Link></li>
-              <li><Link to="/financialAssistant">financialAssistant</Link></li>
+              <li><Link to="/IncomeSource">Income Source</Link></li>
               <li><Link to="/Expenses">Expenses</Link></li>
               <li><Link to="/Budget">Budget</Link></li>
               <li><Link to="/ExpenseCategory">ExpenseCategory</Link></li>
+              <li><Link to="/financialAssistant">Financial Assistant</Link></li>
+            </ul>
+          </li>
+          
+          <li className="dropdown"><Link><span>Document Support</span> <i className="bi bi-chevron-down dropdown-indicator"></i></Link>
+            <ul> 
+              <li><Link to="/Documents">Documents</Link></li>
+              <li><Link to="/DocumentQ&A">Document Inquiry</Link></li>
             </ul>
           </li>
           

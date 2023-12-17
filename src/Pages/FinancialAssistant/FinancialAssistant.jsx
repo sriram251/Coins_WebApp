@@ -76,7 +76,8 @@ const FinancialAssistant = () => {
               key={index}
               className={`message ${message.sender}`}
             >
-              {message.text}
+              <div dangerouslySetInnerHTML={{ __html: message.text }} className='chatmessageContainer' />
+              
             </div>
           ))}
           {
